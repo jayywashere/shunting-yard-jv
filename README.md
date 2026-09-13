@@ -52,7 +52,7 @@ parentheses can be used to control the order of operations:
 clone the repository:
 
 ```bash
-git clone https://github.com/jayywashere/shunting-yard
+git clone https://github.com/jayywashere/shunting-yard-jv
 cd ShuntingYard
 ```
 
