@@ -12,32 +12,59 @@ public class Lexer {
         StringBuilder builder = new StringBuilder();
         String expression = equation.getExpression();
 
+        boolean expectOperand = true;
+
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
 
             if (Character.isDigit(c) || c == '.') {
                 builder.append(c);
-            } else {
+                continue;
+            }
 
-                if (!builder.isEmpty()) {
-                    String number = builder.toString();
-                    builder.setLength(0);
-    
-                    addToken(Token.Type.NUMBER, number);
+            if (!builder.isEmpty()) {
+                String number = builder.toString();
+                builder.setLength(0);
+
+                addToken(Token.Type.NUMBER, number);
+                expectOperand = false;
+            }
+
+            switch (c) {
+                case '+', '-' -> {
+                    if (expectOperand) {
+                        addToken(
+                            Token.Type.OPERATOR,
+                            c == '+' ? "u+" : "u-"
+                        );
+                    } else {
+                        addToken(Token.Type.OPERATOR, String.valueOf(c));
+                    }
+
+                    expectOperand = true;
                 }
-                
-                switch (c) {
-                    case '+', '-', '*', '/', '%'
-                        -> addToken(Token.Type.OPERATOR, String.valueOf(c));
 
-                    case ' ' -> {}
-                    
-                    case '(' -> addToken(Token.Type.LPAREN, String.valueOf(c));
-                    case ')' -> addToken(Token.Type.RPAREN, String.valueOf(c));
-
-                    default // ? addToken(Token.Type.UNKNOWN, String.valueOf(c));
-                        -> throw new IllegalArgumentException("Unknown character: " + c);
+                case '*', '/', '%', '^' -> {
+                    addToken(Token.Type.OPERATOR, String.valueOf(c));
+                    expectOperand = true;
                 }
+
+                case '(' -> {
+                    addToken(Token.Type.LPAREN, String.valueOf(c));
+                    expectOperand = true;
+                }
+
+                case ')' -> {
+                    addToken(Token.Type.RPAREN, String.valueOf(c));
+                    expectOperand = false;
+                }
+
+                case ' ' -> {}
+
+                default ->
+                    throw new IllegalArgumentException(
+                        "Unknown character: " + c
+                    );
             }
         }
 

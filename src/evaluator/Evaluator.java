@@ -30,7 +30,10 @@ public class Evaluator {
     private void addNumber(Token token) {
         if (token.getType() != Token.Type.NUMBER) {
             throw new IllegalArgumentException(
-                "Expected a NUMBER token, got: " + token.getType() + " with value: " + token.getValue()
+                "Expected a NUMBER token, got: "
+                + token.getType()
+                + " with value: "
+                + token.getValue()
             );
         }
 
@@ -43,8 +46,29 @@ public class Evaluator {
     private void applyOperator(Token token) {
         if (token.getType() != Token.Type.OPERATOR) {
             throw new IllegalArgumentException(
-                "Expected an OPERATOR token, got: " + token.getType() + " with value: " + token.getValue()
+                "Expected an OPERATOR token, got: "
+                + token.getType()
+                + " with value: "
+                + token.getValue()
             );
+        }
+
+        String operator = token.getValue();
+
+        if (operator.equals("u+") || operator.equals("u-")) {
+            double value = stack.removeLast();
+
+            double result = switch (operator) {
+                case "u+" -> value;
+                case "u-" -> -value;
+                default -> throw new IllegalArgumentException(
+                    "Unknown unary operator: "
+                    + operator
+                );
+            };
+
+            stack.add(result);
+            return;
         }
 
         double right = stack.removeLast();
@@ -62,6 +86,7 @@ public class Evaluator {
                 yield left / right;
             }
             case "%" -> left % right;
+            case "^" -> Math.pow(left, right);
 
             default -> throw new IllegalArgumentException("Unknown operator: " + token.getValue());
         };

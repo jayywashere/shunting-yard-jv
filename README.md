@@ -25,6 +25,8 @@ i made this mainly to practice working with:
 - division and modulo
 - interactive terminal interface
 - error handling for invalid characters and division by zero
+- unary operators
+- exponentiation
 
 ## Supported Operators
 
@@ -35,6 +37,7 @@ i made this mainly to practice working with:
 | `*`      | multiplication |
 | `/`      | division       |
 | `%`      | modulo         |
+| `^`      | exponentiation |
 
 parentheses can be used to control the order of operations:
 
@@ -56,16 +59,30 @@ git clone https://github.com/jayywashere/shunting-yard
 cd ShuntingYard
 ```
 
-compile the project:
+compile the project with:
 
 ```powershell
 javac -d out (Get-ChildItem -Recurse -Filter *.java src).FullName
 ```
 
-then run it:
+or:
+
+```powershell
+.\build.bat
+# or \dev.bat for both build + run
+```
+
+then run it with:
 
 ```powershell
 java -cp out app.Main
+```
+
+or:
+
+```powershell
+.\run.bat
+# or \dev.bat for both build + run
 ```
 
 ## Usage
@@ -82,6 +99,9 @@ Type an expression to calculate, or "exit" to quit.
 > 5 + 5
 10.00
 
+> -5 + 5
+0.00
+
 > 780 / 2
 390.00
 
@@ -90,6 +110,9 @@ Type an expression to calculate, or "exit" to quit.
 
 > 123 - 1234
 -1,111.00
+
+> 2 ^ 3
+8.00
 
 > exit
 Goodbye!
